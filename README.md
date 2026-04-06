@@ -1,156 +1,240 @@
-# OnStore Backend API
+# Parking System - Service Management Application
 
-## Setup
+A full-stack MERN application for managing parking services, cars, payments, and service records.
 
+## Project Overview
+
+This is a modern web application built with:
+- **Frontend**: React + Vite + Tailwind CSS
+- **Backend**: Express.js + Node.js (In-memory storage for demo)
+- **Authentication**: JWT-based authentication with bcryptjs password hashing
+
+## Features
+
+✅ User Authentication (Login/Logout)
+✅ Car Management (Create, Read, Update, Delete)
+✅ Service Management (Create, Read, Update, Delete)
+✅ Service Records Management
+✅ Payment Tracking
+✅ Reports & Statistics Dashboard
+✅ Responsive UI with Tailwind CSS
+✅ Protected Routes with JWT Authentication
+
+## Default Credentials
+
+```
+Username: admin
+Password: admin 123
+```
+
+## Project Structure
+
+```
+DAY2/
+├── Backend/
+│   ├── server.js           # Express server with in-memory database
+│   ├── package.json        # Backend dependencies
+│   ├── .env                # Environment variables
+│   └── models/             # Data model definitions
+│
+└── Frontend/
+    └── Jovan/
+        ├── src/
+        │   ├── App.jsx              # Main app with routing
+        │   ├── index.css            # Global styles
+        │   ├── main.jsx             # React entry point
+        │   ├── components/
+        │   │   └── Navbar.jsx       # Navigation bar
+        │   └── pages/
+        │       ├── Login.jsx        # Login page
+        │       ├── Car.jsx          # Car management
+        │       ├── Services.jsx     # Service management
+        │       ├── ServiceRecord.jsx # Service records
+        │       ├── Payment.jsx      # Payment tracking
+        │       └── Reports.jsx      # Statistics dashboard
+        ├── package.json
+        └── vite.config.js
+```
+
+## Getting Started
+
+### Prerequisites
+- Node.js (v14 or higher)
+- npm or yarn
+
+### Installation
+
+1. **Install Backend Dependencies**
+   ```bash
+   cd Backend
+   npm install
+   ```
+
+2. **Install Frontend Dependencies**
+   ```bash
+   cd Frontend/Jovan
+   npm install
+   ```
+
+### Running the Application
+
+#### Terminal 1 - Start Backend Server
 ```bash
-npm install
-cp .env.example .env   # fill in your DB credentials & JWT secret
-npm run dev            # development with nodemon
-npm start              # production
+cd Backend
+node server.js
 ```
+The backend will run on `http://localhost:5000`
 
----
-
-## Base URL
+#### Terminal 2 - Start Frontend Development Server
+```bash
+cd Frontend/Jovan
+npm run dev
 ```
-http://localhost:5000/api
-```
+The frontend will run on `http://localhost:5173`
 
----
+### Access the Application
+Open your browser and navigate to: **http://localhost:5173**
 
-## Authentication
-All protected routes require:
-```
-Authorization: Bearer <token>
-```
+Login with:
+- Username: `admin`
+- Password: `admin 123`
 
----
+## API Endpoints
 
-## Endpoints
+### Authentication
+- `POST /api/auth/login` - User login
 
-### Auth
-| Method | Route | Access | Description |
-|--------|-------|--------|-------------|
-| POST | `/auth/register` | Public | Register buyer or seller |
-| POST | `/auth/login` | Public | Login, returns JWT |
-| GET | `/auth/me` | Auth | Get current user |
-| PUT | `/auth/change-password` | Auth | Change password |
+### Cars
+- `GET /api/cars` - Get all cars
+- `POST /api/cars` - Add new car
+- `PUT /api/cars/:id` - Update car
+- `DELETE /api/cars/:id` - Delete car
 
-**Register body:**
-```json
-{
-  "username": "john",
-  "email": "john@example.com",
-  "password": "secret123",
-  "role": "buyer",
-  "full_name": "John Doe",
-  "phone": "+250700000000"
-}
-```
-For sellers add `"store_name": "My Store"` and set `"role": "seller"`.
+### Services
+- `GET /api/services` - Get all services
+- `POST /api/services` - Add new service
+- `PUT /api/services/:id` - Update service
+- `DELETE /api/services/:id` - Delete service
 
----
+### Service Records
+- `GET /api/service-records` - Get all records
+- `POST /api/service-records` - Add service record
 
-### Products
-| Method | Route | Access | Description |
-|--------|-------|--------|-------------|
-| GET | `/products` | Public | List products (paginated, filterable) |
-| GET | `/products/:slug` | Public | Single product with images & reviews |
-| POST | `/products` | Seller | Create product (multipart/form-data) |
-| PUT | `/products/:id` | Seller | Update own product |
-| DELETE | `/products/:id` | Seller | Delete own product |
+### Payments
+- `GET /api/payments` - Get all payments
+- `POST /api/payments` - Record payment
 
-**Query params for GET /products:**
-`page`, `limit`, `category`, `seller`, `min_price`, `max_price`, `search`, `sort`, `order`
+## Features Description
 
----
+### 1. Login Page
+- Clean, modern login interface with gradient background
+- Email validation
+- Error handling with user-friendly messages
 
-### Cart
-| Method | Route | Access | Description |
-|--------|-------|--------|-------------|
-| GET | `/cart` | Buyer | Get cart items |
-| POST | `/cart` | Buyer | Add item `{ product_id, quantity }` |
-| PATCH | `/cart/:id` | Buyer | Update quantity `{ quantity }` |
-| DELETE | `/cart/:id` | Buyer | Remove item |
-| DELETE | `/cart` | Buyer | Clear cart |
+### 2. Cars Management
+- Add new vehicles with plate number and model
+- View all registered cars
+- Edit car details
+- Delete cars from the system
 
----
+### 3. Services Management
+- Add new services with pricing
+- View service catalog
+- Edit service details and prices
+- Remove services
 
-### Orders
-| Method | Route | Access | Description |
-|--------|-------|--------|-------------|
-| POST | `/orders` | Buyer | Place order from cart |
-| GET | `/orders` | Buyer | My order history |
-| GET | `/orders/seller` | Seller | Orders containing my products |
-| GET | `/orders/:id` | Buyer | Order detail with items |
-| PATCH | `/orders/:id/cancel` | Buyer | Cancel order |
-| PATCH | `/orders/:orderId/items/:itemId/status` | Seller | Update item status |
+### 4. Service Records
+- Record services provided to vehicles
+- Track service history
+- View service costs
 
-**Order status flow:** `pending` → `confirmed` → `delivered` / `cancelled`
+### 5. Payments
+- Record payments from customers
+- Track payment details (car, amount, receiver)
+- View payment history
 
----
+### 6. Reports Dashboard
+- View statistics on:
+  - Total cars
+  - Total services available
+  - Total service records
+  - Total payments processed
+  - Total revenue generated
+  - Average payment amount
+- Visual cards with icons
+- Summary information
 
-### Reviews
-| Method | Route | Access | Description |
-|--------|-------|--------|-------------|
-| POST | `/reviews` | Buyer | Review a delivered product |
-| GET | `/reviews/product/:productId` | Public | Get product reviews |
+### 7. Navigation Bar
+- Clean navigation with all modules
+- User information display
+- Logout functionality
 
----
+## Styling
 
-### Wishlist
-| Method | Route | Access | Description |
-|--------|-------|--------|-------------|
-| GET | `/wishlist` | Buyer | Get wishlist |
-| POST | `/wishlist` | Buyer | Toggle product in wishlist `{ product_id }` |
+The application uses **Tailwind CSS** for styling with:
+- Modern color schemes
+- Responsive grid layouts
+- Gradient backgrounds
+- Smooth transitions and hover effects
+- Mobile-friendly design
 
----
+## Technologies Used
 
-### Categories
-| Method | Route | Access | Description |
-|--------|-------|--------|-------------|
-| GET | `/categories` | Public | Get category tree |
-| POST | `/categories` | Admin | Create category |
+### Frontend
+- React 18.2
+- React Router DOM 6.23
+- Vite 7.2
+- Tailwind CSS 3.4
+- PostCSS
 
----
+### Backend
+- Express.js 4.19
+- bcryptjs 2.4 (password hashing)
+- jsonwebtoken 9.0 (JWT authentication)
+- CORS enabled
 
-### Notifications
-| Method | Route | Access | Description |
-|--------|-------|--------|-------------|
-| GET | `/notifications` | Auth | Get notifications (`?unread=true`) |
-| PATCH | `/notifications/read-all` | Auth | Mark all as read |
+## Notes
 
----
+- The backend uses in-memory storage for demonstration purposes
+- All data will be reset when the server is restarted
+- For production, implement MongoDB or another persistent database
+- Credentials are hardcoded for demo purposes - use environment variables in production
 
-### Analytics
-| Method | Route | Access | Description |
-|--------|-------|--------|-------------|
-| GET | `/analytics/seller` | Seller | Revenue, top products, monthly sales |
+## Development Tips
 
----
+1. **Authentication Token**: Stored in localStorage as `token`
+2. **User Info**: Username stored in localStorage for display
+3. **API Base URL**: All requests go to `http://localhost:5000`
+4. **Protected Routes**: Only accessible when logged in
+5. **Error Handling**: All forms include error messages
 
-## Socket.io Events
+## Troubleshooting
 
-### Client → Server
-| Event | Payload | Description |
-|-------|---------|-------------|
-| `chat:open` | `{ seller_id }` | Open/create room with seller |
-| `chat:join` | `{ room_id }` | Join a chat room |
-| `chat:send` | `{ room_id, body }` | Send a message |
-| `chat:typing` | `{ room_id, typing }` | Typing indicator |
+### Backend won't start
+- Ensure port 5000 is not in use
+- Check Node.js is installed: `node --version`
 
-### Server → Client
-| Event | Payload | Description |
-|-------|---------|-------------|
-| `chat:room` | `{ room_id }` | Room created/found |
-| `chat:history` | `[messages]` | Last 50 messages |
-| `chat:message` | `message` | New incoming message |
-| `chat:typing` | `{ user_id, typing }` | Other user typing |
-| `notification:new` | `{ type, title, body }` | Real-time notification |
+### Frontend won't load
+- Clear browser cache
+- Ensure port 5173 is available
+- Check console for errors (F12)
 
-**Connect with auth:**
-```js
-const socket = io('http://localhost:5000', {
-  auth: { token: 'your_jwt_token' }
-});
-```
+### Can't login
+- Verify backend is running on port 5000
+- Default credentials: admin / admin 123
+- Check browser console for error messages
+
+## Future Enhancements
+
+- MongoDB integration for persistent data storage
+- User registration system
+- Role-based access control
+- Payment gateway integration
+- Email notifications
+- Advanced reporting with charts
+- Export data to PDF/Excel
+- Multi-language support
+
+## License
+
+This project is created for educational purposes.

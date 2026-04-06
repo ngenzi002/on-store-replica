@@ -69,7 +69,7 @@ initSocket(io);
 const PORT = process.env.PORT || 5000;
 testConnection().then(() => {
   server.listen(PORT, () => {
-    console.log(`🚀 OnStore API running on http://localhost:${PORT}`);
-    console.log(`📡 Socket.io ready`);
+    console.log(` OnStore API running on http://localhost:${PORT}`);
+    console.log(` Socket.io ready`);
   });
 });
